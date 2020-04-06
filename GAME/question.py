@@ -34,6 +34,7 @@ class Question():
             self.load_from_path(load_from_path)
             
     def load_from_path(self,path):
+        
         if not os.path.isdir(path):
             raise Exception('Path is not a directory!')
         

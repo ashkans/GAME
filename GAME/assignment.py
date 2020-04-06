@@ -90,7 +90,7 @@ class Assignment():
         texMaker(self.condolidate_tex(), path, name=self.name,anum=self.assignment_num)
 
     def make_assignment_pdf(self,path):
-        self.write_assignment_tex_file(path)
+        self.write_assignment_tex_file(path2tex(path))
         makePdf(self.compilers,path)
         
     def save_input_files(self,directory):
@@ -128,6 +128,7 @@ class Assignment():
     def generate_question_list(self,verbose=False):
         for q in self.candidate_questions:
             
+            
             self.questions.append(Question(join(self.question_db,q)))
             if verbose: print('question is added: %s' % q)
         self.get_question_qids()
@@ -159,7 +160,7 @@ class Assignment():
 
 
     def make_feedback_pdf(self,path,name=None,assignment_num=None):
-        self.write_feedback_file(path,name=name,assignment_num=assignment_num)
+        self.write_feedback_file(path2tex(path),name=name,assignment_num=assignment_num)
         makePdf(self.compilers, path)
         
     
@@ -177,11 +178,11 @@ class Assignment():
         pass
     
 def compileTexself(compilers, texFile):
-    si = subprocess.STARTUPINFO()
-    si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    #si = subprocess.STARTUPINFO()
+    #si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
    
     for command in compilers:
-        subprocess.call(command + " %s" % texFile)        
+        subprocess.call(command + " %s" % texFile, shell=True)        
 
 def path2tex(path):
     pre, ext = os.path.splitext(path)
@@ -204,7 +205,7 @@ def makePdf(compilers, texFile):
     os.chdir(dirPath)
     #os.system("pdflatex %s" % path)
     
-    compileTexself(compilers, texFile)
+    compileTexself(compilers, path2tex(texFile))
     '''
     si = subprocess.STARTUPINFO()
     si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
