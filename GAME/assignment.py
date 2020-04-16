@@ -33,7 +33,7 @@ def load_assignment(path, qdb = None, verbose = False):
 
 
 class Assignment():
-    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentTexFile=None):
+    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None):
         self.questions = []
         self.candidate_questions=question_list
         self.name = name
@@ -42,7 +42,7 @@ class Assignment():
         self.feedbacks = None
         self.question_db = question_db
         self.fromTexFile = False
-        self.assignmentTexFile = assignmentTexFile
+        self.assignmentName = assignmentName
         
         self.compilers = ['pdflatex']
   
@@ -60,7 +60,7 @@ class Assignment():
         return assign_tex
 
     def make_assignment_pdf_from_tex_file(self,path,verbose=False):
-        pathToFolder = join(self.question_db, self.assignmentTexFile)
+        pathToFolder = join(self.question_db, self.assignmentName)
         pathToFiles = join(pathToFolder, 'files')
         dirPath = os.path.dirname(path2pdf(path))
         tempPath = join(dirPath, 'temp')
