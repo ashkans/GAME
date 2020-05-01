@@ -4,6 +4,7 @@ import os
 from os.path import join
 import importlib.util
 import pickle
+from GAME.fileNameManager import FileNameManager
 
 
 def load_module_by_name(path):
@@ -49,7 +50,8 @@ class Question():
         question_maker_path = join(path, 'text_maker.py')
         loaded_module = load_module_by_name(question_maker_path)
         self.text.maker = loaded_module.maker
-        self.text.save_inputs = lambda path, qid : loaded_module.save_inputs(self.text.inputs, path, qid)
+        
+        self.text.save_inputs = lambda savingPath : loaded_module.save_inputs(self.text.inputs, savingPath)
         
         self.generate_inputs_tex(join(path,'files'))
     
@@ -80,6 +82,6 @@ class TextMaker():
         self.maker=maker
         self.tex=tex
         self.inputs=inputs
-        self.save_inputs=lambda path, qid : save_inputs(self.inputs, path, qid)
+        self.save_inputs=lambda savingPath : save_inputs(self.inputs, savingPath)
 
 

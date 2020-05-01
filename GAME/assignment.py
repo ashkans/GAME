@@ -10,15 +10,16 @@ import yaml
 from GAME.texMaker import texMaker
 from GAME.question import Question
 from GAME.answer import Answer
+from GAME.fileNameManager import FileNameManager
 import GAME
 import shutil
 import os
 import subprocess
-from distutils import dir_util, file_util
+from distutils import dir_util
 
 def load_assignment(path, qdb = None, verbose = False):
     file = open(path,'r')
-    assign = yaml.load(file, Loader=yaml.FullLoader)
+    assign = yaml.load(file)
     file.close()
     
     if qdb is not None:
@@ -33,7 +34,7 @@ def load_assignment(path, qdb = None, verbose = False):
 
 
 class Assignment():
-    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None):
+    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None):
         self.questions = []
         self.candidate_questions=question_list
         self.name = name
@@ -43,6 +44,7 @@ class Assignment():
         self.question_db = question_db
         self.fromTexFile = False
         self.assignmentName = assignmentName
+        self.studentID = studentID
         
         self.compilers = ['pdflatex']
   
@@ -81,11 +83,6 @@ class Assignment():
         dir_util.remove_tree(tempPath)
         
      
-
-        
-        
-
-        
     def write_assignment_tex_file(self,path):
         texMaker(self.condolidate_tex(), path, name=self.name,anum=self.assignment_num)
 
@@ -95,7 +92,9 @@ class Assignment():
         
     def save_input_files(self,directory):
         for q in self.questions:
-            q.text.save_inputs(directory, q.qid)
+            fnm = FileNameManager(q.qid, self.studentID, self.assignment_num)
+            savingPath =  join(directory, fnm.getInputFileName())
+            q.text.save_inputs(savingPath)
 
 
     def save(self,path):
