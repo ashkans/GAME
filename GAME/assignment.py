@@ -92,7 +92,8 @@ class Assignment():
         
     def save_input_files(self,directory):
         for q in self.questions:
-            fnm = FileNameManager(q.qid, self.studentID, self.assignment_num)
+            
+            fnm = FileNameManager(self.studentID, self.assignment_num, q.qid)
             savingPath =  join(directory, fnm.getInputFileName())
             q.text.save_inputs(savingPath)
 
