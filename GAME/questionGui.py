@@ -58,6 +58,12 @@ class QuestionGui(object):
         variable.set(options[0]) # default value
         opt = OptionMenu(self.window, variable, *options)
         opt.grid(column=column, row=row)
+        
+        def callback(*args):
+            self.msgbox(title='a', message=variable.get())
+        
+        variable.trace("w", callback)
+
         return opt    
     
     def add_button(self, column=0, row=0, **kwargs):
@@ -119,7 +125,8 @@ class QuestionGui(object):
                 elif element['type'] == 'dropDown':
                     options=element['options']
                     self.elements[key] = self.add_dropDown(width=20, name=key, column=column, row=row, options=options)
-                
+                    
+
                     
                     
                     
