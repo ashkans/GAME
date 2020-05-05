@@ -17,4 +17,4 @@ class FileNameManager:
         return 'answer_%s_A%s_%s.xlsx' % (self.studentID, self.assignment_num, self.qid)
     
     def feedbackFileName(self):
-        return 'feedback_A%s_%d.pdf'%(self.studentID, self.assignment_num)
+        return 'feedback_%s_A%d.pdf'%(self.studentID, self.assignment_num)
