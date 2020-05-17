@@ -87,7 +87,7 @@ def print_header(f_ptr,tstr,cnum):
 def texMaker(ostr,outputfile,name='Calculate basic statistics',verbous=False,anum=0):
     #print(ostr)
     
-    f_ptr = open_feedback(outputfile,name,anum)
+    f_ptr = open_feedback(outputfile,name,anum-1)
     f_ptr.write('\n')
     all_ostr = ''
     
