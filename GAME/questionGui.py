@@ -4,8 +4,10 @@ Created on Thu Mar  5 11:39:30 2020
 
 @author: ashkans
 """
-from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu
+from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu, filedialog
 import yaml
+from os.path import join
+
 
 
 class QuestionGui(object):
@@ -52,19 +54,20 @@ class QuestionGui(object):
         txt.grid(column=column, row=row)
         return txt
 
-    def add_dropDown(self, column=0, row=0, options = None, **kwargs):
+    def add_dropDown(self, column=0, row=0, options = None, callback=None, **kwargs):
         options = ['--'] if options is None else options
         variable = StringVar(self.window)
         variable.set(options[0]) # default value
         opt = OptionMenu(self.window, variable, *options)
         opt.grid(column=column, row=row)
         
-        def callback(*args):
-            self.msgbox(title='a', message=variable.get())
+        if callback is None:
+            def callback(*args):
+                self.msgbox(title='a', message=variable.get())
         
         variable.trace("w", callback)
 
-        return opt    
+        return opt, variable    
     
     def add_button(self, column=0, row=0, **kwargs):
         btn = Button(self.window, **kwargs)
@@ -97,10 +100,30 @@ class QuestionGui(object):
         self.details['sid_label'] = self.add_text(column=left+2, row=top+1, text='Student ID',  font=("Arial Bold", 12))
         self.details['sid'] = self.add_entry(column=left+3, row=top+1, width=20, justify="center", default_value = "0000000")
           
-
+    def savedf(self,df, fn):
+        d = filedialog.askdirectory(title='Please select a folder to save the output!')
         
-    def msgbox(self, title=None, message=None, **options):
-        messagebox.showinfo(title=title, message=message, **options)
+        print(d)
+        if d != "":
+
+            #fn = "output.xlsx" if fn == "" else fn_no_ext
+            
+            f = join(d, fn)
+            
+            try:
+                df.to_excel(f)
+                self.msgbox(title="Your file is saved!", message= "file is save here: %s" % f)
+            except:
+                self.msgbox(msgtype='error', title="There is some issue with saving! Your file is not saved!", message= "Your file is not saved!")        
+        
+    def msgbox(self, title=None, message=None, msgtype='info', **options):
+        
+        if msgtype == 'error':
+            messagebox.showerror(title=title, message=message, **options)
+        elif msgtype == 'warning' :   
+            messagebox.showwarning(title=title, message=message, **options)
+        else:
+            messagebox.showinfo(title=title, message=message, **options)
         
     def makeByYaml(self, path, addDetailsBar = True):
         self.elements={}
@@ -116,23 +139,43 @@ class QuestionGui(object):
             structure = yaml.load(file)
             for key, element in structure.items():
                 row, column = element['location'][0] + offset[0], element['location'][1] + offset[1]
-                _ = self.add_text(text=element['title'],  font=("Arial Bold", 15), column=column-1, row=row)                
-                
-                if element['type'] == 'textBox':
-                    self.elements[key] = self.add_entry(width=20, name=key, column=column, row=row)
-
-                    
-                elif element['type'] == 'dropDown':
-                    options=element['options']
-                    self.elements[key] = self.add_dropDown(width=20, name=key, column=column, row=row, options=options)
-                    
+                self.elements[key] = self.add_element(element, column, row, key)
 
                     
                     
                     
         
         print(structure)
+    
+    def add_element(self, element, column, row, name):
+        '''
+        element (dict)
+            element['title']
+            element['type']
+
+        '''
+        txt = self.add_text(text=element['title'],  font=("Arial Bold", 15), column=column-1, row=row)                
+        if element['type'] == 'textBox':
+            obj = self.add_entry(width=20, name=name, column=column, row=row)
+            return [txt, obj]
+    
+        elif element['type'] == 'dropDown':
+            options=element['options']
+            callback = element['callback']
+            obj, strvar = self.add_dropDown(width=20, name=name, column=column, row=row, options=options, callback = callback)
+            return [txt, obj], strvar
+
+
         
+def make_element(title,elementType,options=None, callback=None):
+    '''
+    title -> str
+    elementType in {'textBox', 'dropDown'}
+    
+
+    '''
+    options =[] if options is None else options
+    return {'title': title, 'type': elementType, 'options':options, 'callback':callback}        
 
 if __name__ == '__main__':
     gui = QuestionGui()
