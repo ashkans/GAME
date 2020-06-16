@@ -37,6 +37,7 @@ def print_header(f_ptr,tstr,cnum):
     f_ptr.write('\\usepackage{graphicx}\n')
     f_ptr.write('\\usepackage{longtable}\n')
     f_ptr.write('\\usepackage{booktabs}\n')
+    f_ptr.write('\\usepackage[table]{xcolor}\n')
     f_ptr.write('\n')
     f_ptr.write('\\textwidth 16.5cm\n')
     f_ptr.write('\\textheight 23cm\n')
