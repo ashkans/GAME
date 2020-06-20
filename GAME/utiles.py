@@ -7,10 +7,32 @@ class GuiStructure:
     def __init__(self):
         self.structure = {}
         
-    def addElement(self, name, elementType, location, title, options=None):
+    def addElement(self, name, elementType, location, title, options=None, withTitle=True):
+        '''
+        
+
+        Parameters
+        ----------
+        name : TYPE
+            DESCRIPTION.
+        elementType : TYPE
+            DESCRIPTION.
+        location : TYPE
+            DESCRIPTION.
+        title : TYPE
+            DESCRIPTION.
+        options : TYPE, optional
+            DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        None.
+
+        '''
+        
         
         options = [] if options is None else options
-        self.structure[name] = {'type':elementType, 'location':location, 'title':title, 'options':options}
+        self.structure[name] = {'type':elementType, 'location':location, 'title':title, 'options':options, 'withTitle':withTitle}
         
     def save(self, path):
         with open(path, 'w') as file:
@@ -83,7 +105,8 @@ def checkValues(studentAnswer, correctAnswer,varName, maxMark=1,
 
     correct = False
     if len(bounds) == 1:
-        if studentAnswer == bounds:
+        print(bounds[0], studentAnswer)
+        if studentAnswer == bounds[0]:
             correct = True
     else:
         if studentAnswer >= bounds[0] and studentAnswer <= bounds[1]:

@@ -7,11 +7,14 @@ Created on Thu Mar  5 11:39:30 2020
 from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu, filedialog
 import yaml
 from os.path import join
-
+from tkinter.ttk import Separator, Style
+from GAME.fileNameManager import FileNameManager
+import pandas as pd
 
 
 class QuestionGui(object):
-    def __init__(self, title = None, resizable = True, geometry = None):
+    def __init__(self, title = None, resizable = True, geometry = None, 
+                 aid_default="1", qid_default="1", sid_default="0000"):
         self.title = "Engineering Investigation" if title is None else title
         self.resizable = (0, 0) if not resizable else (1,1)
         
@@ -20,6 +23,10 @@ class QuestionGui(object):
         self.geometry = geometry
         self.window = Tk()
         
+        
+        self.aid_default=aid_default
+        self.qid_default=qid_default
+        self.sid_default=sid_default
         
     def equaly_weight(self):
         print(self.grid_size())
@@ -63,7 +70,8 @@ class QuestionGui(object):
         
         if callback is None:
             def callback(*args):
-                self.msgbox(title='a', message=variable.get())
+                pass
+                #self.msgbox(title='a', message=variable.get())
         
         variable.trace("w", callback)
 
@@ -91,14 +99,20 @@ class QuestionGui(object):
 
         '''
         self.details = {}
-        self.details['aid_label'] = self.add_text(column=left, row=top, text='Assignment number',  font=("Arial Bold", 10))
-        self.details['aid'] = self.add_entry(column=left+1, row=top, width=20, justify="center", default_value = "1")
+        self.details['aid_label'] = self.add_text(column=left, row=top, text='Assignment number',
+                                                  font=("Arial Bold", 10))
+        self.details['aid'] = self.add_entry(column=left+1, row=top, width=20,
+                                             justify="center", default_value = self.aid_default)
         
-        self.details['qid_label'] = self.add_text(column=left+2, row=top, text='Question number',  font=("Arial Bold", 10))
-        self.details['qid'] = self.add_entry(column=left+3, row=top, width=20, justify="center", default_value = "1")
+        self.details['qid_label'] = self.add_text(column=left+2, row=top, text='Question number',
+                                                  font=("Arial Bold", 10))
+        self.details['qid'] = self.add_entry(column=left+3, row=top, width=20, 
+                                             justify="center", default_value = self.qid_default)
         
-        self.details['sid_label'] = self.add_text(column=left+2, row=top+1, text='Student ID',  font=("Arial Bold", 12))
-        self.details['sid'] = self.add_entry(column=left+3, row=top+1, width=20, justify="center", default_value = "0000000")
+        self.details['sid_label'] = self.add_text(column=left+2, row=top+1, text='Student ID',
+                                                  font=("Arial Bold", 12))
+        self.details['sid'] = self.add_entry(column=left+3, row=top+1, width=20,
+                                             justify="center", default_value = self.sid_default)
           
     def savedf(self,df, fn):
         d = filedialog.askdirectory(title='Please select a folder to save the output!')
@@ -112,7 +126,7 @@ class QuestionGui(object):
             
             try:
                 df.to_excel(f)
-                self.msgbox(title="Your file is saved!", message= "file is save here: %s" % f)
+                self.msgbox(title="Your file is saved!", message= "File is saved here: %s" % f)
             except:
                 self.msgbox(msgtype='error', title="There is some issue with saving! Your file is not saved!", message= "Your file is not saved!")        
         
@@ -138,32 +152,86 @@ class QuestionGui(object):
         with open(path) as file:
             structure = yaml.load(file)
             for key, element in structure.items():
+                print(key)
                 row, column = element['location'][0] + offset[0], element['location'][1] + offset[1]
-                self.elements[key] = self.add_element(element, column, row, key)
+                if 'withTitle' in element.keys():
+                    withTitle = element['withTitle']
 
+                out = self.add_element(element, column, row, key, withTitle=withTitle)
+                if out[1] is not None: 
+                    self.elements[key] = out[1]
                     
                     
-                    
+        self.add_save_button(column=1, row = 15)
         
-        print(structure)
+                   
+    def add_save_button(self, column, row):
+        self.add_button(column=column, row=row, text="Save", bg="white", fg="black", command=self.saveElements)
+
+    def saveElements(self):
+        df = pd.DataFrame(columns=['0'])   
+
+        for k, e in self.elements.items():
+            print(k, e.get())
+            df.loc[k]=e.get()
+
+        
     
-    def add_element(self, element, column, row, name):
+        fnm = FileNameManager(self.details['sid'].get() , self.details['aid'].get(), self.details['qid'].get())
+        fn = fnm.getAnswerFileName()
+            
+        self.savedf(df, fn)
+            
+        
+        
+    def add_element(self, element, column, row, name, withTitle=True):
         '''
         element (dict)
             element['title']
             element['type']
 
         '''
-        txt = self.add_text(text=element['title'],  font=("Arial Bold", 15), column=column-1, row=row)                
+        
+        if withTitle:
+            txt = self.add_text(text=element['title'],  font=("Arial Bold", 12), column=column-1, row=row)
+        else:
+            txt = None
+            
         if element['type'] == 'textBox':
             obj = self.add_entry(width=20, name=name, column=column, row=row)
             return [txt, obj]
     
         elif element['type'] == 'dropDown':
-            options=element['options']
-            callback = element['callback']
+            options = element['options']
+            if 'callback' in element.keys():
+                callback = element['callback']
+            else:
+                callback = None
+                
             obj, strvar = self.add_dropDown(width=20, name=name, column=column, row=row, options=options, callback = callback)
             return [txt, obj], strvar
+
+        if element['type'] == 'text':
+
+            obj = self.add_text(text=element['title'],  font=("Arial Bold", 10), column=column-1, row=row)
+            return [None, None]
+        
+        
+        if element['type'] == 'hl':
+            options = element['options']
+            sty = Style(self.window)
+            sty.configure("TSeparator", background="black")            
+            sep_h = Separator(self.window, orient="horizontal")            
+            sep_h.grid(column=column, row=row, rowspan = options[0], columnspan = 1, sticky='ns')
+            return [None, None]
+          
+        if element['type'] == 'vl':
+            options = element['options']
+            sty = Style(self.window)
+            sty.configure("TSeparator", background="black")  
+            sep_v = Separator(self.window, orient="vertical")            
+            sep_v.grid(column=column, row=row, rowspan = 1, columnspan = options[0], sticky='ew')
+            return [None, None]  
 
 
         
