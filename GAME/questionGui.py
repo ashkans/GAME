@@ -28,6 +28,8 @@ class QuestionGui(object):
         self.qid_default=qid_default
         self.sid_default=sid_default
         
+        self.savingOrder = None
+        
     def equaly_weight(self):
         print(self.grid_size())
         gs = self.grid_size()
@@ -117,13 +119,12 @@ class QuestionGui(object):
     def savedf(self,df, fn):
         d = filedialog.askdirectory(title='Please select a folder to save the output!')
         
-        print(d)
         if d != "":
 
             #fn = "output.xlsx" if fn == "" else fn_no_ext
             
             f = join(d, fn)
-            
+                        
             try:
                 df.to_excel(f)
                 self.msgbox(title="Your file is saved!", message= "File is saved here: %s" % f)
@@ -139,8 +140,9 @@ class QuestionGui(object):
         else:
             messagebox.showinfo(title=title, message=message, **options)
         
-    def makeByYaml(self, path, addDetailsBar = True):
+    def makeByYaml(self, path, addDetailsBar = True, savingOrder=None):
         self.elements={}
+        self.savingOrder=savingOrder
         offset = [0, 0]
         
         if addDetailsBar:
@@ -152,7 +154,6 @@ class QuestionGui(object):
         with open(path) as file:
             structure = yaml.load(file)
             for key, element in structure.items():
-                print(key)
                 row, column = element['location'][0] + offset[0], element['location'][1] + offset[1]
                 if 'withTitle' in element.keys():
                     withTitle = element['withTitle']
@@ -165,15 +166,18 @@ class QuestionGui(object):
         self.add_save_button(column=1, row = 15)
         
                    
-    def add_save_button(self, column, row):
+    def add_save_button(self, column, row, savingOrder=None):
         self.add_button(column=column, row=row, text="Save", bg="white", fg="black", command=self.saveElements)
 
     def saveElements(self):
         df = pd.DataFrame(columns=['0'])   
-
-        for k, e in self.elements.items():
-            print(k, e.get())
-            df.loc[k]=e.get()
+        
+        if self.savingOrder is None:
+            for k, e in self.elements.items():
+                df.loc[k]=e.get()
+        else:
+            for k in self.savingOrder:
+                df.loc[k]=self.elements[k].get()                         
 
         
     
