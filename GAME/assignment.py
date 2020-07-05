@@ -6,7 +6,7 @@ Created on Wed Nov 13 15:21:10 2019
 """
 
 from os.path import join
-import yaml
+import yaml, sys
 from GAME.texMaker import texMaker
 from GAME.question import Question
 from GAME.answer import Answer
@@ -146,7 +146,12 @@ class Assignment():
         self.feedbacks = []
         for i, q in enumerate(self.questions):
             r = q.marking.result_loader(result_path_list[i])
-            m, f = q.marking.marker(q.text.inputs, r)
+            
+            try:
+                m, f = q.marking.marker(q.text.inputs, r)
+            except Exception as e:
+                m = None
+                f = ['Marker encountered a problem! Error: %s' % repr(e)]
             
             if m is not None:
                 self.mark += m

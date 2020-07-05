@@ -1,16 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar  5 11:39:30 2020
-
-@author: ashkans
-"""
-from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu, filedialog
+from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu, filedialog, ttk
 import yaml
 from os.path import join
 from tkinter.ttk import Separator, Style
 from GAME.fileNameManager import FileNameManager
 import pandas as pd
-
 
 class QuestionGui(object):
     def __init__(self, title = None, resizable = True, geometry = None, 
@@ -22,8 +15,7 @@ class QuestionGui(object):
             geometry = '600x350'
         self.geometry = geometry
         self.window = Tk()
-        
-        
+    
         self.aid_default=aid_default
         self.qid_default=qid_default
         self.sid_default=sid_default
@@ -144,6 +136,9 @@ class QuestionGui(object):
         self.elements={}
         self.savingOrder=savingOrder
         offset = [0, 0]
+        
+        
+      
         
         if addDetailsBar:
             offset[0] = offset[0] + 2 
