@@ -1,7 +1,55 @@
 # -*- coding: utf-8 -*-
-import yaml
+import yaml, os
 import numpy as np
 import inspect
+import importlib
+from os.path import join
+
+
+def _writeModule(module, path, obfuscate, nonlatin):
+    moduleString = inspect.getsource(module)
+    
+    pathTemp = path + 'temp'
+    f = open(pathTemp, "w")
+    f.write(moduleString)
+    f.close()    
+    
+    
+    string = f'pyminifier {pathTemp} > {path}'
+    if obfuscate:
+        string = f'pyminifier -O --nonlatin --replacement-length=2 {pathTemp} > {path}'
+        
+        if not nonlatin:
+            string = f'pyminifier -O --replacement-length=2 {pathTemp} > {path}'
+                
+    
+    os.system(string)
+    os.remove(pathTemp)
+    
+    
+    f = open(path, "r")
+    lines = f.readlines()
+    f.close()   
+    
+    f = open(path, "w")    
+    f.writelines(lines[:-2])  
+    f.close()
+
+def installGameForGui(path=None, modules=['questionGui', 'fileNameManager'], 
+                      obfuscate=False, nonlatin=True):
+    
+    path = '' if path is None else path
+    gamePath = os.path.join(path, 'GAME')
+    if not os.path.exists(gamePath):
+        os.makedirs(gamePath)
+    
+    for m in modules:
+        _writeModule(importlib.import_module('GAME.' + m), join(gamePath,m+'.py'),
+                     obfuscate, nonlatin)
+  
+    f = open(join(gamePath,'__init__.py'), "w")
+    f.write('')
+    f.close()   
 
 class GuiStructure:
     def __init__(self):

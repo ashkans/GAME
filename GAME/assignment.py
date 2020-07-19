@@ -39,15 +39,40 @@ class Assignment():
         self.candidate_questions=question_list
         self.name = name
         self.assignment_num = assignment_num
+        self.marks = []
         self.mark = None
         self.feedbacks = None
         self.question_db = question_db
         self.fromTexFile = False
         self.assignmentName = assignmentName
         self.studentID = studentID
+        self.returnLetterMark = True
         
         self.compilers = ['pdflatex']
-  
+        self.markingSchem={'ub': [100, 79, 69, 59, 49],
+                           'name':['HD', 'D', 'C', 'P', 'N']}
+    @property
+    def letterMark(self):
+        return self.convertToLetter(self.mark)
+        
+    def convertToLetter(self, m):
+        m = 0 if m is None else m
+        ms = self.markingSchem 
+        sorted_zip = sorted(zip(ms['ub'], ms['name']), key = lambda t: t[0])
+        letterMark = sorted_zip[0][1]
+        for i in sorted_zip:
+            if m>i[0]:
+                letterMark = i[1]
+        return letterMark
+            
+    
+    def markToShow(self, m):
+        if self.returnLetterMark:
+            return self.convertToLetter(m)
+        
+        else:
+            return "{:4.1f}\%".format(m*100)
+        
     def condolidate_tex(self):
         assign_tex = ['\\BN']
         for q in self.questions:
@@ -152,10 +177,20 @@ class Assignment():
             except Exception as e:
                 m = None
                 f = ['Marker encountered a problem! Error: %s' % repr(e)]
+            m = 0 if m is None else m
             
-            if m is not None:
-                self.mark += m
-            self.feedbacks+=[' --- ', 'Feedback for %s' % q.qid] + f
+            self.marks.append(m)
+            self.mark += m / len(self.questions)
+            
+            self.feedbacks.append('Feedback for %s' % q.qid)
+            self.feedbacks += f
+            self.feedbacks.append("Mark for this part = %s" % self.markToShow(m))
+            self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
+        
+        self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
+        self.feedbacks.append("\\textbf{Total mark = " + self.letterMark + "}")
+        self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
+            
         
     
     def write_feedback_file(self,path,name=None,assignment_num=None):
