@@ -222,7 +222,7 @@ def compileTexself(compilers, texFile):
     #si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
    
     for command in compilers:
-        subprocess.call(command + " %s" % texFile, shell=True)        
+        subprocess.call(command + ' "%s"' % texFile, shell=True)        
 
 def path2tex(path):
     pre, ext = os.path.splitext(path)
