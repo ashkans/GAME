@@ -32,7 +32,7 @@ def load_assignment(path, qdb = None, verbose = False):
     
     return assign
 
-
+markingSchem={'ub': [79, 69, 59, 49, 0],'name':['HD', 'D', 'C', 'P', 'N']}
 class Assignment():
     def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None):
         self.questions = []
@@ -49,7 +49,7 @@ class Assignment():
         self.returnLetterMark = True
         
         self.compilers = ['pdflatex']
-        self.markingSchem={'ub': [100, 79, 69, 59, 49],
+        self.markingSchem={'ub': [79, 69, 59, 49, 0],
                            'name':['HD', 'D', 'C', 'P', 'N']}
     @property
     def letterMark(self):
@@ -57,7 +57,7 @@ class Assignment():
         
     def convertToLetter(self, m):
         m = 0 if m is None else m
-        ms = self.markingSchem 
+        ms = markingSchem 
         sorted_zip = sorted(zip(ms['ub'], ms['name']), key = lambda t: t[0])
         letterMark = sorted_zip[0][1]
         for i in sorted_zip:
