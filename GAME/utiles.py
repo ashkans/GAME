@@ -115,9 +115,9 @@ def checkValues(studentAnswer, correctAnswer,varName, maxMark=1,
     #correctFeedbackString = '%s is correct!' if correctFeedbackString is None else correctFeedbackString
     #falseFeedbackString = '%s is not correct! The correct value is %8.3f' if falseFeedbackString is None else falseFeedbackString
     
-    correctFeedbackString = '{varName} is correct!' if correctFeedbackString is None else correctFeedbackString
+    correctFeedbackString = 'The {varName} is correct.' if correctFeedbackString is None else correctFeedbackString
     cft = magic_fstring_function(correctFeedbackString)
-    falseFeedbackString = '{varName} is not correct! The correct value is {correctAnswer}.' if falseFeedbackString is None else falseFeedbackString
+    falseFeedbackString = 'The {varName} is not correct, the correct value is {correctAnswer}.' if falseFeedbackString is None else falseFeedbackString
     fft = magic_fstring_function(falseFeedbackString)
     
     
