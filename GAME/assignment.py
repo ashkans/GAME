@@ -176,7 +176,9 @@ class Assignment():
                 m, f = q.marking.marker(q.text.inputs, r)
             except Exception as e:
                 m = None
-                f = ['Marker encountered a problem! Error: %s' % repr(e)]
+                errorString = 'Marker encountered a problem! Error: %s' % repr(e)
+                errorString = errorString.replace('_','\_')
+                f = [errorString]
             m = 0 if m is None else m
             
             self.marks.append(m)
