@@ -94,7 +94,8 @@ def texMaker(ostr,outputfile,name='Calculate basic statistics',verbous=False,anu
     
     for rec in ostr:
         all_ostr += ' %s\n\n' % rec
-    
+
+        
     f_ptr.write(all_ostr)
     print('Tex file is generated!')
     

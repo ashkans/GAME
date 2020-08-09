@@ -171,13 +171,13 @@ class Assignment():
         self.feedbacks = []
         for i, q in enumerate(self.questions):
             r = q.marking.result_loader(result_path_list[i])
-            
             try:
                 m, f = q.marking.marker(q.text.inputs, r)
             except Exception as e:
                 m = None
                 errorString = 'Marker encountered a problem! Error: %s' % repr(e)
                 errorString = errorString.replace('_','\_')
+                errorString = errorString.replace('$','\$')
                 f = [errorString]
             m = 0 if m is None else m
             
