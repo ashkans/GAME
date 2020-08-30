@@ -123,7 +123,7 @@ def checkValues(studentAnswer, correctAnswer,varName, maxMark=1,
     falseFeedbackString = 'The {varName} is not correct, the correct value is {correctAnswer}.' if falseFeedbackString is None else falseFeedbackString
     fft = magic_fstring_function(falseFeedbackString)
     
-    wrongTypeFeedbackString = 'The variable type inserted for {varName} is not correct.'
+    wrongTypeFeedbackString = 'The variable type inserted for "{varName}" is not correct.'
     wft = magic_fstring_function(wrongTypeFeedbackString)    
     
     
