@@ -107,6 +107,9 @@ class magic_fstring_function:
         vars.update(inspect.currentframe().f_back.f_locals)
         return self.payload.format(**vars)
 
+def _isStr(value):
+    return isinstance(value, str)
+
 
 def checkValues(studentAnswer, correctAnswer,varName, maxMark=1,
                 comparisonType=('Additive', 0), correctFeedbackString=None,
@@ -120,12 +123,20 @@ def checkValues(studentAnswer, correctAnswer,varName, maxMark=1,
     falseFeedbackString = 'The {varName} is not correct, the correct value is {correctAnswer}.' if falseFeedbackString is None else falseFeedbackString
     fft = magic_fstring_function(falseFeedbackString)
     
+    wrongTypeFeedbackString = 'The variable type inserted for {varName} is not correct.'
+    wft = magic_fstring_function(wrongTypeFeedbackString)    
+    
     
     
     compDict = {'a':'Additive', 'additive':'Additive', 'Additive':'Additive',
                 'm':'Multiplicative', 'multiplicative':'Multiplicative', 'Multiplicative':'Multiplicative',
                 't':'String', 's':'String', 'string':'String', 'String':'String',
                 'e':'Exact', 'exact':'Exact', 'Exact':'Exact' }
+    
+    typesNotMatch = _isStr(studentAnswer) ^ _isStr(correctAnswer)
+        
+    if typesNotMatch:
+        return 0, str(wft)
     
     if isinstance(comparisonType, str):
         comparisonType = (comparisonType, None)        
