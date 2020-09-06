@@ -1,4 +1,5 @@
 from tkinter import Tk, Button, Label, Entry, messagebox, StringVar, OptionMenu, filedialog, ttk
+import tkinter as tk
 import yaml
 from os.path import join
 from tkinter.ttk import Separator, Style
@@ -21,6 +22,7 @@ class QuestionGui(object):
         self.sid_default=sid_default
         
         self.savingOrder = None
+
         
     def equaly_weight(self):
         print(self.grid_size())
