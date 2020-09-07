@@ -32,7 +32,7 @@ def load_assignment(path, qdb = None, verbose = False):
     
     return assign
 
-markingSchem={'ub': [79, 69, 59, 49, 0],'name':['HD', 'D', 'C', 'P', 'N']}
+markingSchem={'ub': [79.5, 69.5, 59.5, 49.5, 0],'name':['HD', 'D', 'C', 'P', 'N']}
 class Assignment():
     def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None):
         self.questions = []
@@ -49,7 +49,7 @@ class Assignment():
         self.returnLetterMark = True
         
         self.compilers = ['pdflatex']
-        self.markingSchem={'ub': [79, 69, 59, 49, 0],
+        self.markingSchem={'ub': [79.5, 69.5, 59.5, 49.5, 0],
                            'name':['HD', 'D', 'C', 'P', 'N']}
     @property
     def letterMark(self):
