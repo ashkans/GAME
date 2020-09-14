@@ -32,7 +32,7 @@ def load_assignment(path, qdb = None, verbose = False):
     
     return assign
 
-markingSchem={'ub': [79.5, 69.5, 59.5, 49.5, 0],'name':['HD', 'D', 'C', 'P', 'N']}
+markingSchem={'ub': [79.999999999, 69.999999999, 59.999999999, 49.999999999, 0],'name':['HD', 'D', 'C', 'P', 'N']}
 class Assignment():
     def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None):
         self.questions = []
@@ -49,7 +49,7 @@ class Assignment():
         self.returnLetterMark = True
         
         self.compilers = ['pdflatex']
-        self.markingSchem={'ub': [79.5, 69.5, 59.5, 49.5, 0],
+        self.markingSchem={'ub': [79.999999999, 69.999999999, 59.999999999, 49.999999999, 0],
                            'name':['HD', 'D', 'C', 'P', 'N']}
     @property
     def letterMark(self):
@@ -170,6 +170,7 @@ class Assignment():
         self.mark = 0 
         self.feedbacks = []
         for i, q in enumerate(self.questions):
+            print(result_path_list[i])
             r = q.marking.result_loader(result_path_list[i])
             try:
                 m, f = q.marking.marker(q.text.inputs, r)
@@ -188,8 +189,7 @@ class Assignment():
             self.feedbacks += f
             self.feedbacks.append("Mark for this part = %s" % self.markToShow(m))
             self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
-        
-        self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
+            self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
         self.feedbacks.append("\\textbf{Total mark = " + self.letterMark + "}")
         self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
             
