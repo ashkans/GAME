@@ -177,14 +177,15 @@ class Assignment():
             try:
                 m, f = q.marking.marker(q.text.inputs, r)
             except Exception as e:
-                m = -9999
+                m = None
                 errorString = 'Marker encountered a problem! Error: %s' % repr(e)
                 errorString = errorString.replace('_','\_')
                 errorString = errorString.replace('$','\$')
                 f = [errorString]
+            m = 0 if m is None else m
             
             self.marks.append(m)
-            m = 0 if m == -9999 or m is None else m
+            
             if 'weights' in self.__dict__:
                 self.mark += m * self.weights[i]
             else:

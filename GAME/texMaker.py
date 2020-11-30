@@ -4,6 +4,8 @@
 #################################################################
 def close_feedback(f_ptr):
 
+#    f_ptr.write('{\\huge End of Exam Paper}')
+
     f_ptr.write('\n\\end{document}\n')
     f_ptr.close
 
@@ -18,6 +20,8 @@ def open_feedback(f_fn,tstr,anum):
     f_ptr=open(f_fn,"w")
     f_ptr=print_header(f_ptr,tstr,anum)
 
+#    f_ptr.write('{\\huge Beginning of Exam Paper}')
+
     return(f_ptr)
 
 #################################################################
@@ -25,6 +29,8 @@ def open_feedback(f_fn,tstr,anum):
 #################################################################
 
 def print_header(f_ptr,tstr,cnum):
+
+    i_ex=0
 
     f_ptr.write('\\documentclass[a4paper,12pt]{CURSUS}\n')
     f_ptr.write('\n')
@@ -79,9 +85,31 @@ def print_header(f_ptr,tstr,cnum):
     f_ptr.write('\n')
     ostr='\\addtocounter{chapter}{'+repr(cnum)+'}\n'
     f_ptr.write(ostr)
-    f_ptr.write('\\renewcommand{\\chaptername}{Assignment}\n')
-    ostr='\\chapter{'+tstr+'}\n'
-    f_ptr.write(ostr)
+    if (i_ex == 0):
+        f_ptr.write('\\renewcommand{\\chaptername}{Assignment}\n')
+        ostr='\\chapter{'+tstr+'}\n'
+        f_ptr.write(ostr)
+    if (i_ex == 1):
+        ostr='{\\huge Final Assessment}\n'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
+        ostr='{\\huge CIV3204 - Engineering Investigation}\n'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
+        ostr='{\\Large For all the questions with a graphical user interface in this final \
+    assessment, when entering numbers, please enter \\underline{only numbers}, \
+    and no units, characters or symbols.}'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
+        ostr='\\\\\n'
+        f_ptr.write(ostr)
 
     return(f_ptr)
 

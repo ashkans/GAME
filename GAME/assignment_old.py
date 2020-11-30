@@ -34,7 +34,7 @@ def load_assignment(path, qdb = None, verbose = False):
 
 markingSchem={'ub': [79.999999999, 69.999999999, 59.999999999, 49.999999999, 0],'name':['HD', 'D', 'C', 'P', 'N']}
 class Assignment():
-    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None, weights=None):
+    def __init__(self,question_db=None,question_list=None,name=None,assignment_num=0,assignmentName=None, studentID=None):
         self.questions = []
         self.candidate_questions=question_list
         self.name = name
@@ -47,8 +47,6 @@ class Assignment():
         self.assignmentName = assignmentName
         self.studentID = studentID
         self.returnLetterMark = True
-        if weights is not None:
-            self.weights = weights
         
         self.compilers = ['pdflatex']
         self.markingSchem={'ub': [79.999999999, 69.999999999, 59.999999999, 49.999999999, 0],
@@ -177,18 +175,15 @@ class Assignment():
             try:
                 m, f = q.marking.marker(q.text.inputs, r)
             except Exception as e:
-                m = -9999
+                m = None
                 errorString = 'Marker encountered a problem! Error: %s' % repr(e)
                 errorString = errorString.replace('_','\_')
                 errorString = errorString.replace('$','\$')
                 f = [errorString]
+            m = 0 if m is None else m
             
             self.marks.append(m)
-            m = 0 if m == -9999 or m is None else m
-            if 'weights' in self.__dict__:
-                self.mark += m * self.weights[i]
-            else:
-                self.mark += m / len(self.questions)
+            self.mark += m / len(self.questions)
             
             self.feedbacks.append('Feedback for %s' % q.qid)
             self.feedbacks += f
