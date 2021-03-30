@@ -86,7 +86,7 @@ def print_header(f_ptr,tstr,cnum):
     ostr='\\addtocounter{chapter}{'+repr(cnum)+'}\n'
     f_ptr.write(ostr)
     if (i_ex == 0):
-        f_ptr.write('\\renewcommand{\\chaptername}{Assignment}\n')
+        f_ptr.write('\\renewcommand{\\chaptername}{Practice Class Assignment}\n')
         ostr='\\chapter{'+tstr+'}\n'
         f_ptr.write(ostr)
     if (i_ex == 1):

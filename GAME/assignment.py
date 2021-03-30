@@ -46,7 +46,8 @@ class Assignment():
         self.fromTexFile = False
         self.assignmentName = assignmentName
         self.studentID = studentID
-        self.returnLetterMark = True
+#        self.returnLetterMark = True
+        self.returnLetterMark = False
         if weights is not None:
             self.weights = weights
         
@@ -195,7 +196,8 @@ class Assignment():
             self.feedbacks.append("Mark for this part = %s" % self.markToShow(m))
             self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
             self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
-        self.feedbacks.append("\\textbf{Total mark = " + self.letterMark + "}")
+#        self.feedbacks.append("\\textbf{Total mark = " + self.letterMark + "}")
+        self.feedbacks.append("\\textbf{Total mark = " + str(self.mark) + "}")
         self.feedbacks.append(' \\noindent\\rule{8cm}{0.4pt} ')
             
         
