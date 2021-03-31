@@ -189,7 +189,7 @@ class Assignment():
             if 'weights' in self.__dict__:
                 self.mark += m * self.weights[i]
             else:
-                self.mark += m / len(self.questions)
+                self.mark += 100*m / len(self.questions)
             
             self.feedbacks.append('Feedback for %s' % q.qid)
             self.feedbacks += f
