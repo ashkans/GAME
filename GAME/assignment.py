@@ -19,7 +19,7 @@ from distutils import dir_util
 
 def load_assignment(path, qdb = None, verbose = False):
     file = open(path,'r')
-    assign = yaml.load(file)
+    assign = yaml.load(file, Loader=yaml.Loader)
     file.close()
     
     if qdb is not None:
