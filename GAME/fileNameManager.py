@@ -14,7 +14,8 @@ class FileNameManager:
         return 'input_%s_A%s_%s.csv' % (self.studentID, self.assignment_num, self.qid)
     
     def getAnswerFileName(self):
-        return 'answer_%s_A%s_%s.xlsx' % (self.studentID, self.assignment_num, self.qid)
+#        return 'answer_%s_A%s_%s.xlsx' % (self.studentID, self.assignment_num, self.qid)
+        return 'answer_%s_A%s_%s.csv' % (self.studentID, self.assignment_num, self.qid)
     
     def feedbackFileName(self):
         return 'feedback_%s_A%d.pdf'%(self.studentID, self.assignment_num)
