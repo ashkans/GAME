@@ -4,7 +4,7 @@
 #################################################################
 def close_feedback(f_ptr):
 
-#    f_ptr.write('{\\huge End of Exam Paper}')
+    f_ptr.write('{\\huge End of Exam Paper}')
 
     f_ptr.write('\n\\end{document}\n')
     f_ptr.close
@@ -20,7 +20,7 @@ def open_feedback(f_fn,tstr,anum):
     f_ptr=open(f_fn,"w")
     f_ptr=print_header(f_ptr,tstr,anum)
 
-#    f_ptr.write('{\\huge Beginning of Exam Paper}')
+    f_ptr.write('{\\huge Beginning of Exam Paper}')
 
     return(f_ptr)
 
@@ -30,7 +30,7 @@ def open_feedback(f_fn,tstr,anum):
 
 def print_header(f_ptr,tstr,cnum):
 
-    i_ex=0
+    i_ex=1
 
     f_ptr.write('\\documentclass[a4paper,12pt]{CURSUS}\n')
     f_ptr.write('\n')
@@ -108,7 +108,11 @@ def print_header(f_ptr,tstr,cnum):
         f_ptr.write(ostr)
         ostr='\\\\\n'
         f_ptr.write(ostr)
+        f_ptr.write(ostr)
+        ostr='{\\Large For questions 5 through 8, submit your answers as one pdf named CIV3204 ID.pdf}'
+        f_ptr.write(ostr)
         ostr='\\\\\n'
+        f_ptr.write(ostr)
         f_ptr.write(ostr)
 
     return(f_ptr)
