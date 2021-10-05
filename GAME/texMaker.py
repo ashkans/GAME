@@ -109,7 +109,7 @@ def print_header(f_ptr,tstr,cnum):
         ostr='\\\\\n'
         f_ptr.write(ostr)
         f_ptr.write(ostr)
-        ostr='{\\Large For questions 5 through 8, submit your answers as one pdf named CIV3204 ID.pdf}'
+        ostr='{\\Large For questions 5 through 8, submit your answers as one pdf named CIV3204\_ID.pdf}'
         f_ptr.write(ostr)
         ostr='\\\\\n'
         f_ptr.write(ostr)
